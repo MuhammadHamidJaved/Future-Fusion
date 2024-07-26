@@ -1,4 +1,4 @@
-import mockapi from './mockapi';
+import mockapi from '../api/mockapi';
 
 const getPets = async () => {
   const response = await mockapi('/pets', {

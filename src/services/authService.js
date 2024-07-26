@@ -1,4 +1,4 @@
-import mockapi from './mockapi';
+import mockapi from '../api/mockapi';
 
 const login = async (email, password) => {
   const response = await mockapi('/auth/login', {
