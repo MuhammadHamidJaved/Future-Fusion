@@ -1,47 +1,31 @@
 import React from 'react';
-import { Card, CardContent, Typography, Button, CardActions } from '@mui/material';
+import { Card, CardContent, Typography, IconButton } from '@mui/material';
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
 
-const PetCard = ({ pet, onEdit, onDelete }) => {
-  const handleEdit = () => {
-    const newName = prompt('Enter new name:', pet.name);
-    const newType = prompt('Enter new type:', pet.type);
-    const newBreed = prompt('Enter new breed:', pet.breed);
-    const newAge = prompt('Enter new age:', pet.age);
-    if (newName && newType && newBreed && newAge) {
-      onEdit(pet.id, { name: newName, type: newType, breed: newBreed, age: newAge });
-    }
-  };
-
-  return (
-    <Card variant="outlined" sx={{ mb: 2 }}>
-      <CardContent>
-        <Typography variant="h6" component="h3">
-          <label>Id: </label>
-          {pet.id}
-        </Typography>
-        <Typography variant="body">
-          <label>Name: </label>
-          {pet.name}
-        </Typography>
-        <Typography variant="body2">
-          <label>Type: </label>
-          {pet.type}
-        </Typography>
-        <Typography variant="body2">
-          <label>Breed: </label>
-           {pet.breed} 
-        </Typography>
-        <Typography variant="body2">
-          <label>Age: </label>
-           {pet.age} years old
-        </Typography>
-      </CardContent>
-      <CardActions>
-        <Button size="small" onClick={handleEdit}>Edit</Button>
-        <Button size="small" color="error" onClick={() => onDelete(pet.id)}>Delete</Button>
-      </CardActions>
-    </Card>
-  );
-};
+const PetCard = ({ pet, onEdit, onDelete }) => (
+  <Card sx={{ maxWidth: 345, marginBottom: 2 }}>
+    <CardContent>
+      <Typography variant="h5" component="div">
+        {pet.name}
+      </Typography>
+      <Typography variant="body2" color="text.secondary">
+        Type: {pet.type}
+      </Typography>
+      <Typography variant="body2" color="text.secondary">
+        Breed: {pet.breed}
+      </Typography>
+      <Typography variant="body2" color="text.secondary">
+        Age: {pet.age}
+      </Typography>
+    </CardContent>
+    <IconButton onClick={() => onEdit(pet)} color="primary">
+      <EditIcon />
+    </IconButton>
+    <IconButton onClick={() => onDelete(pet.id)} color="secondary">
+      <DeleteIcon />
+    </IconButton>
+  </Card>
+);
 
 export default PetCard;

@@ -1,73 +1,74 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Dialog, DialogActions, DialogContent, DialogTitle, TextField, Button } from '@mui/material';
 
-const AddPetDialog = ({ open, onClose, onAddPet }) => {
+const AddPetDialog = ({ open, onClose, onSave, pet }) => {
   const [name, setName] = useState('');
   const [type, setType] = useState('');
   const [breed, setBreed] = useState('');
   const [age, setAge] = useState('');
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    onAddPet({ name, type, breed, age });
+  useEffect(() => {
+    if (pet) {
+      setName(pet.name);
+      setType(pet.type);
+      setBreed(pet.breed);
+      setAge(pet.age);
+    }
+  }, [pet]);
+
+  const handleSave = () => {
+    onSave({ name, type, breed, age });
     setName('');
     setType('');
     setBreed('');
     setAge('');
-    onClose();
   };
 
   return (
     <Dialog open={open} onClose={onClose}>
-      <DialogTitle>Add Pet</DialogTitle>
+      <DialogTitle>{pet ? 'Edit Pet' : 'Add Pet'}</DialogTitle>
       <DialogContent>
-        <form onSubmit={handleSubmit}>
-          <TextField
-            autoFocus
-            margin="dense"
-            label="Name"
-            fullWidth
-            variant="outlined"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            required
-          />
-          <TextField
-            margin="dense"
-            label="Type"
-            fullWidth
-            variant="outlined"
-            value={type}
-            onChange={(e) => setType(e.target.value)}
-            required
-          />
-          <TextField
-            margin="dense"
-            label="Breed"
-            fullWidth
-            variant="outlined"
-            value={breed}
-            onChange={(e) => setBreed(e.target.value)}
-            required
-          />
-          <TextField
-            margin="dense"
-            label="Age"
-            fullWidth
-            variant="outlined"
-            type="number"
-            value={age}
-            onChange={(e) => setAge(e.target.value)}
-            required
-          />
-        </form>
+        <TextField
+          autoFocus
+          margin="dense"
+          label="Name"
+          fullWidth
+          variant="outlined"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+        />
+        <TextField
+          margin="dense"
+          label="Type"
+          fullWidth
+          variant="outlined"
+          value={type}
+          onChange={(e) => setType(e.target.value)}
+        />
+        <TextField
+          margin="dense"
+          label="Breed"
+          fullWidth
+          variant="outlined"
+          value={breed}
+          onChange={(e) => setBreed(e.target.value)}
+        />
+        <TextField
+          margin="dense"
+          label="Age"
+          type="number"
+          fullWidth
+          variant="outlined"
+          value={age}
+          onChange={(e) => setAge(e.target.value)}
+        />
       </DialogContent>
       <DialogActions>
         <Button onClick={onClose} color="primary">
           Cancel
         </Button>
-        <Button onClick={handleSubmit} color="primary">
-          Add
+        <Button onClick={handleSave} color="primary">
+          Save
         </Button>
       </DialogActions>
     </Dialog>

@@ -1,56 +1,54 @@
-import React, { useState, useEffect } from 'react';
-import PetList from '../components/PetList';
-import petService from '../services/petService';
-import { Container, Box, Button } from '@mui/material';
+import React, { useState } from 'react';
+import { Container, Button, Box } from '@mui/material';
 import Header from '../components/Header';
 import AddPetDialog from '../components/AddPetDialog';
+import PetList from '../components/PetList';
+import { mockPets } from '../mockData';
 
 const Home = () => {
-  const [pets, setPets] = useState([]);
-  const [petsUpdated, setPetsUpdated] = useState(false);
-  const [dialogOpen, setDialogOpen] = useState(false);
+  const [pets, setPets] = useState(mockPets);
+  const [openDialog, setOpenDialog] = useState(false);
+  const [editPet, setEditPet] = useState(null);
 
-  useEffect(() => {
-    setPets(petService.getPets());
-  }, [petsUpdated]);
-
-  const handleAddPet = (pet) => {
-    petService.addPet(pet);
-    setPetsUpdated(!petsUpdated);
+  const handleOpenDialog = (pet = null) => {
+    setEditPet(pet);
+    setOpenDialog(true);
   };
 
-  const handleEditPet = (id, updatedPet) => {
-    petService.updatePet(id, updatedPet);
-    setPetsUpdated(!petsUpdated);
+  const handleCloseDialog = () => {
+    setOpenDialog(false);
+    setEditPet(null);
+  };
+
+  const handleAddOrEditPet = (pet) => {
+    if (editPet) {
+      setPets(pets.map(p => p.id === editPet.id ? { ...pet, id: editPet.id } : p));
+    } else {
+      setPets([...pets, { ...pet, id: Date.now() }]);
+    }
+    handleCloseDialog();
   };
 
   const handleDeletePet = (id) => {
-    petService.deletePet(id);
-    setPetsUpdated(!petsUpdated);
+    setPets(pets.filter(pet => pet.id !== id));
   };
 
   return (
     <Box>
       <Header />
       <Container>
-        <Box my={4}>
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={() => setDialogOpen(true)}
-          >
-            Add Pet
-          </Button>
-        </Box>
-        <Box my={2}>
-          <PetList pets={pets} onEditPet={handleEditPet} onDeletePet={handleDeletePet} />
-        </Box>
+        <br />
+        <Button variant="contained" color="primary" onClick={() => handleOpenDialog()}>
+          Add Pet
+        </Button>
+        <PetList pets={pets} onEdit={handleOpenDialog} onDelete={handleDeletePet} />
+        <AddPetDialog
+          open={openDialog}
+          onClose={handleCloseDialog}
+          onSave={handleAddOrEditPet}
+          pet={editPet}
+        />
       </Container>
-      <AddPetDialog
-        open={dialogOpen}
-        onClose={() => setDialogOpen(false)}
-        onAddPet={handleAddPet}
-      />
     </Box>
   );
 };

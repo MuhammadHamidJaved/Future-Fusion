@@ -1,7 +1,7 @@
-import fakeFetch from './fakeFetch';
+import mockapi from './mockapi';
 
 const login = async (email, password) => {
-  const response = await fakeFetch('/auth/login', {
+  const response = await mockapi('/auth/login', {
     method: 'POST',
     body: JSON.stringify({ email, password })
   });
@@ -10,7 +10,7 @@ const login = async (email, password) => {
 };
 
 const signup = async (email, password) => {
-  const response = await fakeFetch('/auth/signup', {
+  const response = await mockapi('/auth/signup', {
     method: 'POST',
     body: JSON.stringify({ email, password })
   });
@@ -19,7 +19,7 @@ const signup = async (email, password) => {
 };
 
 const logout = async () => {
-  await fakeFetch('/auth/logout', {
+  await mockapi('/auth/logout', {
     method: 'POST'
   });
 };
